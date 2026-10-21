@@ -2,7 +2,7 @@
 
 Cíl: funkce placených SEO nástrojů (sledování klíčových slov, hledanost, mezery v obsahu oproti konkurenci) **zdarma a z oficiálních zdrojů**, s důrazem na český trh (Seznam, Sklik). Nejdřív ho používá ArtMoment, ověřené části postupně zveřejníme jako šablonu, kterou si kdokoli zprovozní sám přes GitHub.
 
-> Stav: **interní pilot** (repozitář je soukromý). Co je ověřené a co ne, je v [`docs/poznatky/`](docs/poznatky/).
+> Stav: **pilot** – běží u ArtMomentu, veřejně od 21. 10. 2026. Co je ověřené a co ne, je v [`docs/poznatky/`](docs/poznatky/).
 
 ## Co umí teď
 | Funkce | Zdroj | Stav |
