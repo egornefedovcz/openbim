@@ -1,0 +1,15 @@
+# Nastavení cz-seo-kit. Klíče NEPATŘÍ sem – jen do .env (lokálně) nebo GitHub Secrets.
+domena = "www.artmoment.cz"
+gsc_vlastnost = "sc-domain:artmoment.cz"     # vlastnost v Search Console
+gsc_zeme = "cze"                             # jen hledání z Česka (prázdné = všechny)
+
+# konkurenti pro mezery v obsahu (jen jejich sitemapy, šetrně)
+konkurenti = ["www.allegria.cz", "www.zazitky.cz", "www.kudyznudy.cz", "www.slevomat.cz"]
+max_url_konkurenta = 20000
+
+# výchozí fráze pro návrhy nových klíčových slov (Sklik)
+semena = ["malování", "kurz malování", "zážitek dárek", "malování s vínem", "jak namalovat", "teambuilding", "dárek pro"]
+min_hledanost = 5                             # Sklik/Seznam za měsíc – níž návrhy ignorujeme
+
+# seznam sledovaných slov: CSV se sloupci keyword[,tag,target_url] (export z Collabimu jde rovnou)
+klicova_slova = "keywords.csv"

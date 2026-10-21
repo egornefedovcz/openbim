@@ -1,0 +1,7 @@
+.env
+data/
+__pycache__/
+*.parquet
+keywords.csv
+.DS_Store
+seo.toml
