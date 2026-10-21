@@ -34,3 +34,6 @@ python3 run.py export                  # data/export.csv
 
 ## Plán
 Viz [`docs/plan.md`](docs/plan.md).
+
+## Licence
+MIT – viz [LICENSE](LICENSE).

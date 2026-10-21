@@ -17,4 +17,4 @@
 
 ## Otevřené otázky
 - Název (pozor: „OpenBIM“ je zavedený pojem buildingSMART ze stavebnictví).
-- Licence (MIT / AGPL).
+- ~~Licence~~ – MIT (rozhodnuto 21. 10. 2026).
