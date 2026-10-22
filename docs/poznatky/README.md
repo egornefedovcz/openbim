@@ -11,4 +11,4 @@ Každý poznatek: datum, co jsme zkusili, výsledek, zdroj. Stav: ✅ ověřeno 
 | 2026-10-21 | Google Custom Search API | ❌ | Uzavřené pro nové zákazníky, konec 1. 1. 2027. | [google-serp.md](google-serp.md) |
 | 2026-10-21 | Sitemapy konkurence | ⚠️ | Allegria 1 975 URL, Zážitky.cz 958 ✅; Kudy z nudy 429, Slevomat 403 ❌. | [konkurence.md](konkurence.md) |
 | 2026-10-21 | Rychlost dotazů na Shoptet | ❌ | Paralelní kontrola (~1 600 požadavků) → WAF zablokoval IP na ~4 h. | [konkurence.md](konkurence.md#limity) |
-| — | Google Ads API – Keyword Planner | ❓ | Čeká na developer token (Basic access). | [google-ads.md](google-ads.md) |
+| 2026-10-22 | Google Ads API – Keyword Planner | ⚠️ | Explorer nestačí, Keyword Planner vyžaduje Basic access (projekt v Google Cloud). | [google-ads.md](google-ads.md) |
