@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="cs" data-tema="{{TEMA}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>SEO přehled – {{DOMENA}}</title>
+<!--FONT-->
+<style>
+/* Neutrální téma (open source). Vzhled = jen CSS proměnné, téma ArtMoment je přepisuje níže. */
+:root {
+  color-scheme: light dark;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --bg: #f4f5f7; --card: #ffffff; --surface: #f4f5f7;
+  --ink: #1a1d21; --muted: #555d66; --faint: #646c75;
+  --line: #e3e6ea; --line-strong: #c9ced4;
+  --accent: #1f5fbf; --btn: #1f5fbf; --btn-hover: #194d9b; --btn-ink: #ffffff; --focus: #8fb4ea;
+  --ok: #1f7a3d; --err: #b3261e;
+  --c1: #1f5fbf; --c2: #6d98d6; --c3: #b4c9e8; --c4: #e1e6ec; --c5: #8a5a12;
+  --r: 12px; --r-sm: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --card: #181c21; --surface: #1f242a;
+    --ink: #eef1f4; --muted: #c5ccd3; --faint: #aeb6be;
+    --line: #2b3138; --line-strong: #414953;
+    --accent: #9ec2f5; --btn: #2f6fd0; --btn-hover: #4a84dc; --btn-ink: #ffffff; --focus: #9ec2f5;
+    --ok: #5cc985; --err: #f08a80;
+    --c1: #9ec2f5; --c2: #5f8cc9; --c3: #3a5679; --c4: #2a323c; --c5: #e8b95c;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --card: #181c21; --surface: #1f242a;
+  --ink: #eef1f4; --muted: #c5ccd3; --faint: #aeb6be;
+  --line: #2b3138; --line-strong: #414953;
+  --accent: #9ec2f5; --btn: #2f6fd0; --btn-hover: #4a84dc; --btn-ink: #ffffff; --focus: #9ec2f5;
+  --ok: #5cc985; --err: #f08a80;
+  --c1: #9ec2f5; --c2: #5f8cc9; --c3: #3a5679; --c4: #2a323c; --c5: #e8b95c;
+}
+/* Téma ArtMoment (~/projects/style/artmoment.css): Manrope, jediný akcent navy #253848, tmavý režim přes tokeny */
+:root[data-tema="artmoment"] {
+  --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --bg: #f5f6f7; --card: #ffffff; --surface: #f5f6f7;
+  --ink: #16202a; --muted: #5b6670; --faint: #69737d;
+  --line: #e7eaed; --line-strong: #cfd5db;
+  --accent: #253848; --btn: #253848; --btn-hover: #1b2a37; --btn-ink: #ffffff; --focus: #a9cae9;
+  --ok: #1f7a3d; --err: #b3261e;
+  --c1: #253848; --c2: #5b7a95; --c3: #a3b8ca; --c4: #dfe5ea; --c5: #a8741a;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-tema="artmoment"]:not([data-theme="light"]) {
+    --bg: #0f161d; --card: #151f28; --surface: #1a2530;
+    --ink: #f3f6f8; --muted: #d3dbe2; --faint: #b9c4cd;
+    --line: #27343f; --line-strong: #3d4c59;
+    --accent: #c3d7e8; --btn: #3d5d78; --btn-hover: #4a6d8b; --btn-ink: #ffffff; --focus: #c3d7e8;
+    --ok: #5cc985; --err: #f08a80;
+    --c1: #c3d7e8; --c2: #7f9db7; --c3: #4f6a82; --c4: #2c3b48; --c5: #e8b95c;
+  }
+}
+:root[data-tema="artmoment"][data-theme="dark"] {
+  --bg: #0f161d; --card: #151f28; --surface: #1a2530;
+  --ink: #f3f6f8; --muted: #d3dbe2; --faint: #b9c4cd;
+  --line: #27343f; --line-strong: #3d4c59;
+  --accent: #c3d7e8; --btn: #3d5d78; --btn-hover: #4a6d8b; --btn-ink: #ffffff; --focus: #c3d7e8;
+  --ok: #5cc985; --err: #f08a80;
+  --c1: #c3d7e8; --c2: #7f9db7; --c3: #4f6a82; --c4: #2c3b48; --c5: #e8b95c;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+body { font-size: 15px; line-height: 1.5; }
+a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+button, input, select { font: inherit; color: inherit; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: absolute; left: 16px; top: -60px; background: var(--btn); color: var(--btn-ink); padding: 10px 14px; border-radius: var(--r-sm); z-index: 10; }
+.skip:focus { top: 12px; }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+header.top { background: var(--card); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-top: 14px; padding-bottom: 0; }
+.brand { display: flex; flex-direction: column; min-width: 0; margin-right: auto; }
+.brand b { font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+.brand span { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+nav.tabs { width: 100%; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; }
+nav.tabs a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; color: var(--muted); text-decoration: none; font-weight: 600; border-bottom: 3px solid transparent; white-space: nowrap; }
+nav.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs a:hover { color: var(--ink); }
+
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border-radius: var(--r-sm);
+  border: 1.5px solid var(--accent); background: transparent; color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .04em; cursor: pointer; text-decoration: none; }
+.btn:hover { background: var(--surface); }
+.btn.primary { background: var(--btn); border-color: var(--btn); color: var(--btn-ink); }
+.btn.primary:hover { background: var(--btn-hover); border-color: var(--btn-hover); }
+:root[data-tema="artmoment"] .btn { text-transform: uppercase; letter-spacing: .1em; font-size: 12px; }
+
+main { padding: 24px 0 48px; }
+.head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; margin-bottom: 18px; }
+h1 { font-size: clamp(24px, 3vw, 34px); line-height: 1.15; margin: 0; letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere; }
+h2 { font-size: 16px; margin: 0; font-weight: 700; }
+.lead { color: var(--muted); margin: 6px 0 0; max-width: 70ch; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; }
+.kpi .v { font-size: 26px; font-weight: 800; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.kpi .l { color: var(--muted); font-size: 13px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.col { display: grid; gap: 16px; min-width: 0; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); min-width: 0; }
+.card > .ch { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.card > .cb { padding: 16px 18px; }
+.card .more { display: block; text-align: right; font-weight: 600; font-size: 14px; margin-top: 10px; }
+.note { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+.chart { position: relative; height: 240px; }
+.chart.small { height: 130px; }
+.chart.donut { height: 220px; }
+.empty { color: var(--muted); padding: 20px 0; text-align: center; }
+details.help { font-size: 13px; color: var(--muted); margin-top: 10px; }
+details.help summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+
+.changes { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 20px; }
+.changes li { break-inside: avoid; padding: 5px 0; display: flex; gap: 8px; align-items: baseline; }
+.changes .pos { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 2.2em; text-align: right; }
+.up { color: var(--ok); font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.down { color: var(--err); font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.legend { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--line-strong); }
+.donuts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: center; }
+.na { border: 1px dashed var(--line-strong); border-radius: var(--r); padding: 14px; color: var(--muted); font-size: 13px; text-align: center; }
+.na b { display: block; color: var(--ink); font-size: 14px; margin-bottom: 4px; }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { background: var(--surface); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); white-space: nowrap; position: sticky; top: 0; }
+tbody tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.url { max-width: 260px; overflow-wrap: anywhere; }
+th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; min-height: 28px; }
+th button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+th[aria-sort="ascending"] button::after { content: "▲"; font-size: 10px; }
+th[aria-sort="descending"] button::after { content: "▼"; font-size: 10px; }
+.card table th, .card table td { padding: 8px 10px; }
+.card .tablewrap { border: 0; border-radius: 0; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: 12px; font-weight: 600; white-space: nowrap; }
+
+.filters { display: grid; grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-bottom: 12px; }
+.filters label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.filters input[type=search], .filters select { width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: var(--r-sm); background: var(--card); }
+.check { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px; font-weight: 600; }
+.check input { width: 20px; height: 20px; accent-color: var(--btn); }
+.count { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+.pager { display: flex; justify-content: center; margin-top: 14px; }
+
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px; margin: 0 0 16px; }
+.facts div { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-width: 0; }
+.facts dt { color: var(--muted); font-size: 13px; }
+.facts dd { margin: 2px 0 0; font-weight: 700; font-size: 18px; overflow-wrap: anywhere; }
+.facts dd.small { font-size: 14px; font-weight: 600; }
+.back { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; padding: 18px 0 32px; }
+footer p { margin: 4px 0; max-width: 90ch; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .filters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .filters .f-q { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .wrap { padding: 0 16px; }
+  .changes { columns: 1; }
+  .donuts { grid-template-columns: minmax(0, 1fr); }
+  .filters { grid-template-columns: minmax(0, 1fr); }
+  .btns .btn { flex: 1 1 auto; }
+  .kpi .v { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#obsah">Přeskočit na obsah</a>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>SEO přehled</b><span id="meta">{{DOMENA}}</span></div>
+    <div class="btns" role="group" aria-label="Export">
+      <button class="btn primary" type="button" id="exp-kw">Export klíčových slov</button>
+      <button class="btn" type="button" id="exp-xlsx">Excel (XLSX)</button>
+      <button class="btn" type="button" id="exp-tag">Export štítků</button>
+    </div>
+    <nav class="tabs" aria-label="Sekce">
+      <a href="#prehled" data-v="prehled">Hlavní přehled</a>
+      <a href="#slova" data-v="slova">Klíčová slova</a>
+      <a href="#stitky" data-v="stitky">Štítky</a>
+      <a href="#konkurence" data-v="konkurence">Konkurence</a>
+    </nav>
+  </div>
+</header>
+
+<main id="obsah" tabindex="-1">
+<div class="wrap">
+
+<section id="v-prehled" hidden>
+  <div class="head"><div><h1>Hlavní přehled</h1><p class="lead" id="prehled-lead"></p></div></div>
+  <div class="kpis" id="kpis"></div>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><div class="ch"><h2 id="h-den">Důležité změny pozic za poslední den</h2></div><div class="cb"><ul class="changes" id="zm-den" aria-labelledby="h-den"></ul><p class="note" id="zm-den-note"></p><a class="more" href="#slova?razeni=zm">Změny pozic všech klíčových slov</a></div></div>
+      <div class="card"><div class="ch"><h2 id="h-14">Důležité změny pozic za posledních 14 dní</h2></div><div class="cb"><ul class="changes" id="zm-14" aria-labelledby="h-14"></ul><p class="note">Pozice za 7 dní končících posledním dnem dat oproti stejnému oknu o 14 dní dřív.</p></div></div>
+      <div class="card"><div class="ch"><h2>Teoretická návštěvnost z Googlu</h2></div><div class="cb">
+        <div class="chart"><canvas id="ch-navst" role="img"></canvas></div>
+        <details class="help"><summary>Jak se počítá</summary><p>Součet přes sledovaná slova: měsíční hledanost na Googlu (Google Ads) × odhad prokliku podle aktuální pozice. Pozice = vážený průměr ze Search Console za 7 dní. Křivka CTR podle pozice: <span id="ctr-krivka"></span>; 11.–20. pozice 1 %, horší 0 %. Je to odhad k porovnání v čase, ne skutečné kliky.</p></details>
+      </div></div>
+      <div class="card"><div class="ch"><h2>Seznam.cz</h2></div><div class="cb" id="seznam"></div></div>
+      <div class="card"><div class="ch"><h2>Stránky se zobrazením ve vyhledávání</h2></div><div class="cb">
+        <div class="chart small"><canvas id="ch-stranky" role="img"></canvas></div>
+        <p class="note">Počet různých URL, které se daný den v Googlu zobrazily (Search Console). Náhrada za „indexované stránky“ – počet indexovaných stránek Search Console API nedává.</p>
+      </div></div>
+    </div>
+    <div class="col">
+      <div class="card"><div class="ch"><h2>Aktuální rozložení pozic</h2></div><div class="cb">
+        <div class="donuts">
+          <div><div class="chart donut"><canvas id="ch-donut" role="img"></canvas></div><p class="note" style="text-align:center">Google CZ</p></div>
+          <div class="na"><b>Seznam.cz</b>Pozice na Seznamu neměříme – Seznam v robots.txt automatické dotazy na vyhledávání zakazuje. Máme jen hledanost ze Skliku.</div>
+        </div>
+        <ul class="legend" id="leg-donut"></ul>
+      </div></div>
+      <div class="card"><div class="ch"><h2>Rozložení pozic na Googlu v čase</h2></div><div class="cb">
+        <div class="chart small"><canvas id="ch-pocet" role="img"></canvas></div>
+        <div class="chart"><canvas id="ch-rozl" role="img"></canvas></div>
+        <ul class="legend" id="leg-rozl"></ul>
+        <p class="note">Slova se zobrazením v Googlu za posledních 7 dní ke každému dni. Slovo bez zobrazení nemá pozici (nejspíš je až za 5. stránkou).</p>
+      </div></div>
+      <div class="card"><div class="ch"><h2>Google Search Console</h2></div><div class="cb">
+        <div class="chart"><canvas id="ch-gsc" role="img"></canvas></div>
+        <p class="note">Celý web, hledání z Česka, včetně anonymizovaných dotazů.</p>
+      </div></div>
+      <div class="card"><div class="ch"><h2>Poslední změny cílových stránek</h2></div><div class="cb" style="padding:0">
+        <div class="tablewrap" tabindex="0" role="region" aria-label="Poslední změny cílových stránek"><table><thead><tr><th>Datum</th><th>Klíčové slovo</th><th>Původní stránka</th><th>Nová stránka</th></tr></thead><tbody id="cil"></tbody></table></div>
+        <div style="padding:0 18px 14px"><button class="btn" type="button" id="cil-vse" style="margin-top:12px">Zobrazit všechny změny</button><p class="note">Stránka, kterou Google u slova ukazuje nejčastěji (7 dní), se změnila a vydržela aspoň 2 dny.</p></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="v-slova" hidden>
+  <div class="head"><div><h1>Klíčová slova</h1><p class="lead">Pozice na Googlu ze Search Console (vážený průměr za 7 dní), hledanost Google (Google Ads) a Seznam (Sklik). Export bere aktuální filtry.</p></div></div>
+  <div class="filters">
+    <div class="f-q"><label for="f-q">Hledat slovo nebo URL</label><input type="search" id="f-q" placeholder="např. kurz malování" autocomplete="off"></div>
+    <div><label for="f-tag">Štítek</label><select id="f-tag"></select></div>
+    <div><label for="f-pos">Pozice Google</label><select id="f-pos">
+      <option value="">Všechny</option><option value="0">TOP 3</option><option value="1">4.–10.</option><option value="2">11.–20.</option><option value="3">21. a horší</option><option value="x">Bez pozice</option><option value="p">S pozicí</option>
+    </select></div>
+    <label class="check"><input type="checkbox" id="f-navrh"> Jen sledovaná (bez návrhů Skliku)</label>
+  </div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <div class="tablewrap" tabindex="0" role="region" aria-label="Tabulka klíčových slov">
+    <table id="t-slova"><caption class="sr-only">Klíčová slova, řazení tlačítky v záhlaví</caption><thead><tr></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="pager"><button class="btn" type="button" id="dalsi">Zobrazit dalších 100</button></div>
+</section>
+
+<section id="v-slovo" hidden>
+  <a class="back" href="#slova">← Zpět na klíčová slova</a>
+  <div class="head"><div><h1 id="s-nazev"></h1><p class="lead" id="s-lead"></p></div></div>
+  <dl class="facts" id="s-facts"></dl>
+  <div class="card"><div class="ch"><h2>Pozice na Googlu v čase</h2></div><div class="cb">
+    <div class="chart" style="height:300px"><canvas id="ch-slovo" role="img"></canvas></div>
+    <p class="note">Body = pozice za den (jen dny se zobrazením), čára = vážený průměr za 7 dní, sloupce = zobrazení. Seznam: pozice neměříme.</p>
+  </div></div>
+  <div class="card" style="margin-top:16px"><div class="ch"><h2>Stránky, které Google u slova ukazuje (28 dní)</h2></div><div class="cb" style="padding:0">
+    <div class="tablewrap" tabindex="0" role="region" aria-label="Stránky u slova"><table><thead><tr><th>Stránka</th><th class="n">Zobrazení</th></tr></thead><tbody id="s-pg"></tbody></table></div>
+  </div></div>
+</section>
+
+<section id="v-stitky" hidden>
+  <div class="head"><div><h1>Štítky</h1><p class="lead">Souhrn podle štítků (štítky z Collabimu; „navrh“ = návrhy slov ze Skliku). Kliknutím na štítek otevřete jeho slova.</p></div></div>
+  <div class="tablewrap" tabindex="0" role="region" aria-label="Tabulka štítků"><table id="t-stitky"><caption class="sr-only">Souhrn štítků</caption><thead><tr></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="v-konkurence" hidden>
+  <div class="head"><div><h1>Konkurence a mezery v obsahu</h1><p class="lead">Fráze, které lidé hledají, konkurence na ně má stránku (slova z adres v jejich sitemapě) a my se na ně v Googlu za 28 dní nezobrazili.</p></div></div>
+  <div class="kpis" id="konk-kpis"></div>
+  <div class="filters" style="grid-template-columns:minmax(0,1fr)"><div><label for="g-q">Hledat ve frázích</label><input type="search" id="g-q" autocomplete="off"></div></div>
+  <p class="count" id="g-count" aria-live="polite"></p>
+  <div class="tablewrap" tabindex="0" role="region" aria-label="Mezery v obsahu"><table id="t-gap"><caption class="sr-only">Mezery v obsahu</caption><thead><tr><th>Fráze</th><th>Štítek</th><th class="n">Google / měs.</th><th class="n">Seznam / měs.</th><th>Konkurence se stránkou</th></tr></thead><tbody></tbody></table></div>
+  <div class="pager"><button class="btn" type="button" id="g-dalsi">Zobrazit dalších 100</button></div>
+</section>
+
+</div>
+</main>
+<footer><div class="wrap">
+  <p><b>Zdroje:</b> Google Search Console (pozice, zobrazení, kliky – denně, zpoždění ~2–3 dny), Google Ads Keyword Planner (hledanost Google), Sklik (hledanost Seznam), sitemapy konkurence (jen kde to robots.txt povoluje).</p>
+  <p><b>Co neumíme:</b> pozice na Seznamu (Seznam robotům vyhledávání zakazuje) a pozici slov, na která se v Googlu nezobrazujeme. Pozice ze Search Console je průměr ze skutečných zobrazení, ne jednorázové měření výsledků vyhledávání jako v Collabimu.</p>
+  <p id="gen"></p>
+</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous"></script>
+<script>
+'use strict';
+const D = /*DATA*/null;
+const L = D.dny.length - 1;
+const nf = new Intl.NumberFormat('cs-CZ');
+const nf1 = new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const fmt = v => v == null || v === '' ? '–' : nf.format(v);
+const fmtP = v => v == null ? '–' : nf1.format(v);
+const datum = (s, rok) => { const [y, m, d] = s.split('-'); return `${+d}. ${+m}.` + (rok ? ` ${y}` : ''); };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const cesta = u => { try { const x = new URL(u); return decodeURI(x.pathname + x.search) || '/'; } catch (e) { return u || ''; } };
+const odkaz = u => u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(cesta(u))}</a>` : '–';
+const slovoUrl = k => '#slovo/' + encodeURIComponent(k);
+const kos = p => p == null ? 'x' : p <= 3.5 ? '0' : p <= 10.5 ? '1' : p <= 20.5 ? '2' : '3';
+const KOSE = ['TOP 3', '4.–10.', '11.–20.', '21. a horší'];
+const zmena = (pred, ted) => pred == null || ted == null ? null : Math.round((pred - ted) * 10) / 10;   // + = zlepšení
+const zmenaHtml = z => z == null || Math.abs(z) < .1 ? '<span class="note" style="margin:0">–</span>' :
+  z > 0 ? `<span class="up" aria-label="zlepšení o ${fmtP(z)}">▲ ${fmtP(z)}</span>` : `<span class="down" aria-label="zhoršení o ${fmtP(-z)}">▼ ${fmtP(-z)}</span>`;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+D.kw.forEach(r => { r.zm = zmena(r.p7, r.p); r.z14 = zmena(r.p14, r.p); r.nko = r.ko.length; });
+
+/* ---------- filtry (sdílené pro seznam slov i export) ---------- */
+const st = { q: '', tag: '', pos: '', navrh: false, sort: 'g', dir: -1, n: 100 };
+function filtrovana() {
+  const q = st.q.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const rows = D.kw.filter(r => (!st.tag || r.t === st.tag) && (!st.navrh || r.src === 'csv') &&
+    (!st.pos || (st.pos === 'p' ? r.p != null : kos(r.p) === st.pos)) &&
+    (!q || (r.k + ' ' + r.url + ' ' + r.u).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(q)));
+  const k = st.sort, d = st.dir;
+  return rows.sort((a, b) => {
+    let x = a[k], y = b[k];
+    if (x == null || x === '') return 1; if (y == null || y === '') return -1;
+    if (k === 'zm') { x = Math.abs(x); y = Math.abs(y); }
+    return (typeof x === 'string' ? x.localeCompare(y, 'cs') : x - y) * d;
+  });
+}
+
+/* ---------- grafy ---------- */
+let grafy = [];
+function graf(id, cfg, popis) {
+  const el = document.getElementById(id);
+  el.setAttribute('aria-label', popis);
+  if (typeof Chart === 'undefined') { el.parentNode.innerHTML = '<p class="empty">Graf se nenačetl (knihovna Chart.js není dostupná).</p>'; return; }
+  grafy.push(new Chart(el, cfg));
+}
+function zaklad() {
+  Chart.defaults.font.family = css('--font'); Chart.defaults.font.size = 12;
+  Chart.defaults.color = css('--muted'); Chart.defaults.borderColor = css('--line');
+  Chart.defaults.animation = false; Chart.defaults.maintainAspectRatio = false;
+  Chart.defaults.plugins.legend.display = false;
+  Chart.defaults.plugins.tooltip.backgroundColor = css('--ink'); Chart.defaults.plugins.tooltip.titleColor = css('--card'); Chart.defaults.plugins.tooltip.bodyColor = css('--card');
+}
+const dnyOd = i0 => D.dny.slice(i0).map(d => datum(d));
+const osaX = { ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 7 }, grid: { display: false } };
+const tisk = { callback: v => nf.format(v) };
+
+/* ---------- přehled ---------- */
+function prehled() {
+  const i0 = D.okno - 1, s = D.dny.slice(-28).length;
+  const pos = D.kw.filter(r => r.p != null);
+  const r28 = D.gsc.slice(-28).reduce((a, x) => [a[0] + (x[0] || 0), a[1] + (x[1] || 0)], [0, 0]);
+  document.getElementById('prehled-lead').textContent = `Data Search Console do ${datum(D.dny[L], 1)} (${D.dny.length} dní). Aktualizace každý den ráno.`;
+  document.getElementById('kpis').innerHTML = [
+    [fmt(D.kw.length), 'sledovaných slov'], [fmt(pos.length), 's pozicí na Googlu (7 dní)'],
+    [fmt(pos.filter(r => r.p <= 10.5).length), 'v TOP 10'], [fmt(r28[0]), `kliků z Googlu za ${s} dní`],
+    [fmt(D.navst[L]), 'teoretická návštěvnost / měs.']].map(([v, l]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+
+  // důležité změny: poslední den proti předchozímu (jen slova se zobrazením v oba dny)
+  const den = [];
+  D.kw.forEach(r => {
+    const a = r.d.find(x => x[0] === L), b = r.d.find(x => x[0] === L - 1);
+    if (a && b) { const z = zmena(b[1], a[1]); if (Math.abs(z) >= 1) den.push([r, a[1], z, Math.abs(z) * Math.sqrt(Math.min(a[2], b[2]) + (r.g || 0) / 100)]); }
+  });
+  const seznam = (el, rows) => { document.getElementById(el).innerHTML = rows.length ? rows.map(([r, p, z]) =>
+    `<li><span class="pos">${fmtP(p)}</span>${zmenaHtml(z)}<a href="${slovoUrl(r.k)}">${esc(r.k)}</a></li>`).join('') : '<li class="empty">Žádné výrazné změny.</li>'; };
+  seznam('zm-den', den.sort((a, b) => b[3] - a[3]).slice(0, 12));
+  document.getElementById('h-den').textContent = `Důležité změny pozic za den ${datum(D.dny[L], 1)}`;
+  document.getElementById('zm-den-note').textContent = `Proti ${datum(D.dny[L - 1])}; jen slova, která se v Googlu zobrazila v oba dny. Poslední den se v Search Console ještě dopočítává.`;
+  seznam('zm-14', D.kw.filter(r => r.z14 != null && Math.abs(r.z14) >= 1)
+    .map(r => [r, r.p, r.z14, Math.abs(r.z14) * Math.sqrt((r.im || 0) + (r.g || 0) / 10)]).sort((a, b) => b[3] - a[3]).slice(0, 12));
+
+  const barvy = ['--c1', '--c2', '--c3', '--c4'].map(css);
+  const akt = D.rozl[L];
+  graf('ch-donut', { type: 'doughnut', data: { labels: KOSE, datasets: [{ data: akt, backgroundColor: barvy, borderColor: css('--card'), borderWidth: 2 }] }, options: { cutout: '60%' } },
+    'Aktuální rozložení pozic na Googlu: ' + KOSE.map((k, i) => `${k} ${akt[i]} slov`).join(', '));
+  const leg = (el, extra) => { document.getElementById(el).innerHTML = KOSE.map((k, i) => `<li><i style="background:${barvy[i]}"></i>${k}${extra ? ': <b>' + fmt(extra[i]) + '</b>' : ''}</li>`).join(''); };
+  leg('leg-donut', akt); leg('leg-rozl');
+
+  const lab = dnyOd(i0);
+  graf('ch-pocet', { type: 'line', data: { labels: lab, datasets: [{ data: D.pocet.slice(i0), borderColor: css('--accent'), pointRadius: 0, borderWidth: 2 }] },
+    options: { scales: { x: osaX, y: { ticks: tisk, title: { display: true, text: 'slov s pozicí' } } } } },
+    `Počet slov s pozicí: ${D.pocet[i0]} na začátku, ${D.pocet[L]} poslední den`);
+  const proc = D.rozl.slice(i0).map(r => { const s = r.reduce((a, b) => a + b, 0) || 1; return r.map(x => Math.round(x / s * 1000) / 10); });
+  graf('ch-rozl', { type: 'line', data: { labels: lab, datasets: KOSE.map((k, i) => ({ label: k, data: proc.map(r => r[i]), backgroundColor: barvy[i], borderColor: barvy[i], fill: true, pointRadius: 0, borderWidth: 1 })) },
+    options: { interaction: { mode: 'index', intersect: false }, scales: { x: osaX, y: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + ' %' } } },
+      plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${nf1.format(c.raw)} %` } } } } },
+    'Podíl slov podle pozice v čase, poslední den: ' + KOSE.map((k, i) => `${k} ${nf1.format(proc[proc.length - 1][i])} %`).join(', '));
+  graf('ch-navst', { type: 'line', data: { labels: lab, datasets: [{ label: 'Google CZ', data: D.navst.slice(i0), borderColor: css('--accent'), backgroundColor: css('--accent'), pointRadius: 2, borderWidth: 2 }] },
+    options: { scales: { x: osaX, y: { ticks: tisk } } } }, `Teoretická návštěvnost z Googlu: ${D.navst[i0]} na začátku, ${D.navst[L]} poslední den (měsíčně)`);
+  document.getElementById('ctr-krivka').textContent = Object.entries(D.ctr).map(([p, c]) => `${p}. ${nf1.format(c * 100)} %`).join(', ');
+  graf('ch-stranky', { type: 'line', data: { labels: dnyOd(0), datasets: [{ data: D.stranky, borderColor: css('--accent'), pointRadius: 0, borderWidth: 2 }] },
+    options: { scales: { x: osaX, y: { ticks: tisk } } } }, `Stránky se zobrazením: ${D.stranky[L]} poslední den`);
+  graf('ch-gsc', { type: 'line', data: { labels: dnyOd(0), datasets: [
+      { label: 'Zobrazení', data: D.gsc.map(x => x[1]), borderColor: css('--accent'), pointRadius: 0, borderWidth: 2, yAxisID: 'y' },
+      { label: 'Kliky', data: D.gsc.map(x => x[0]), borderColor: css('--c2'), pointRadius: 0, borderWidth: 2, borderDash: [5, 3], yAxisID: 'y2' }] },
+    options: { interaction: { mode: 'index', intersect: false }, plugins: { legend: { display: true, labels: { boxWidth: 12 } } },
+      scales: { x: osaX, y: { ticks: tisk, title: { display: true, text: 'zobrazení' } }, y2: { position: 'right', grid: { display: false }, ticks: tisk, title: { display: true, text: 'kliky' } } } } },
+    `Search Console: poslední den ${fmt(D.gsc[L][1])} zobrazení a ${fmt(D.gsc[L][0])} kliků`);
+
+  const sk = D.kw.filter(r => r.s);
+  document.getElementById('seznam').innerHTML = `<p style="margin:0">Hledanost ze Skliku máme u <b>${fmt(sk.length)}</b> slov, dohromady <b>${fmt(sk.reduce((a, r) => a + r.s, 0))}</b> hledání měsíčně (Google u stejných slov ${fmt(sk.reduce((a, r) => a + (r.g || 0), 0))}).</p>
+    <p class="note">Pozice ani teoretickou návštěvnost ze Seznamu neukazujeme: Seznam v robots.txt automatické dotazy na výsledky vyhledávání zakazuje a Seznam Webmaster nemá veřejné API.</p>`;
+
+  const cil = D.cil.map(([i, k, a, b]) => `<tr><td class="n">${datum(D.dny[i], 1)}</td><td><a href="${slovoUrl(k)}">${esc(k)}</a></td><td class="url">${odkaz(a)}</td><td class="url">${odkaz(b)}</td></tr>`);
+  const tb = document.getElementById('cil'), btn = document.getElementById('cil-vse');
+  tb.innerHTML = cil.slice(0, 15).join('') || '<tr><td colspan="4" class="empty">Zatím žádné změny.</td></tr>';
+  btn.hidden = cil.length <= 15;
+  btn.onclick = () => { tb.innerHTML = cil.join(''); btn.hidden = true; };
+}
+
+/* ---------- seznam slov ---------- */
+const SL = [['k', 'Klíčové slovo'], ['t', 'Štítek'], ['g', 'Google / měs.', 1], ['s', 'Seznam / měs.', 1], ['p', 'Pozice', 1], ['zm', 'Změna 7 d', 1], ['url', 'URL v Googlu'], ['cl', 'Kliky 28 d', 1], ['im', 'Zobrazení 28 d', 1], ['nko', 'Konkurence', 1]];
+function hlavicka(tab, cols, stav, znovu) {
+  tab.querySelector('thead tr').innerHTML = cols.map(([k, n, num]) =>
+    `<th class="${num ? 'n' : ''}" ${stav.sort === k ? `aria-sort="${stav.dir > 0 ? 'ascending' : 'descending'}"` : ''}><button type="button" data-k="${k}">${n}</button></th>`).join('');
+  tab.querySelectorAll('th button').forEach(b => b.onclick = () => {
+    const k = b.dataset.k; stav.dir = stav.sort === k ? -stav.dir : (['k', 't', 'url', 'p'].includes(k) ? 1 : -1); stav.sort = k; znovu();
+  });
+}
+function slova() {
+  const tab = document.getElementById('t-slova');
+  hlavicka(tab, SL, st, () => { st.n = 100; slova(); });
+  const rows = filtrovana();
+  document.getElementById('count').textContent = `Zobrazeno ${fmt(Math.min(st.n, rows.length))} z ${fmt(rows.length)} slov (celkem ${fmt(D.kw.length)}).`;
+  tab.querySelector('tbody').innerHTML = rows.slice(0, st.n).map(r => `<tr>
+    <td><a href="${slovoUrl(r.k)}">${esc(r.k)}</a></td><td>${r.t ? `<span class="tag">${esc(r.t)}</span>` : ''}</td>
+    <td class="n">${fmt(r.g)}</td><td class="n">${fmt(r.s)}</td><td class="n"><b>${fmtP(r.p)}</b></td><td class="n">${zmenaHtml(r.zm)}</td>
+    <td class="url">${odkaz(r.url)}</td><td class="n">${fmt(r.cl)}</td><td class="n">${fmt(r.im)}</td>
+    <td>${r.ko.map(d => esc(d.replace(/^www\./, ''))).join(', ') || '–'}</td></tr>`).join('') || '<tr><td colspan="10" class="empty">Žádné slovo neodpovídá filtrům.</td></tr>';
+  document.getElementById('dalsi').hidden = rows.length <= st.n;
+  exportPopisky(rows.length);
+}
+
+/* ---------- detail slova ---------- */
+function slovo(k) {
+  const r = D.kw.find(x => x.k === k);
+  if (!r) { document.getElementById('s-nazev').textContent = 'Slovo nenalezeno'; return; }
+  document.title = `${r.k} – SEO přehled`;
+  document.getElementById('s-nazev').textContent = r.k;
+  document.getElementById('s-lead').innerHTML = r.t ? `Štítek <a href="#slova?stitek=${encodeURIComponent(r.t)}">${esc(r.t)}</a>` : '';
+  const f = [['Pozice Google (7 dní)', fmtP(r.p)], ['Změna za 7 dní', zmenaHtml(r.zm)], ['Hledanost Google / měs.', fmt(r.g)], ['Hledanost Seznam / měs.', fmt(r.s)],
+    ['Konkurence v Google Ads', r.kg || '–'], ['CPC (Sklik)', r.cpc ? nf1.format(r.cpc) + ' Kč' : '–'], ['Kliky / zobrazení 28 dní', `${fmt(r.cl)} / ${fmt(r.im)}`],
+    ['Stránka v Googlu', odkaz(r.url), 1], ['Cílová stránka', odkaz(r.u), 1], ['Konkurence se stránkou', r.ko.map(esc).join(', ') || '–', 1]];
+  document.getElementById('s-facts').innerHTML = f.map(([t, v, s]) => `<div><dt>${t}</dt><dd class="${s ? 'small' : ''}">${v}</dd></div>`).join('');
+  const den = Array(D.dny.length).fill(null), imp = Array(D.dny.length).fill(0), r7 = Array(D.dny.length).fill(null);
+  r.d.forEach(([i, p, im]) => { den[i] = p; imp[i] = im; });
+  for (let i = 0; i < D.dny.length; i++) {
+    let s = 0, w = 0;
+    r.d.forEach(([j, p, im]) => { if (j <= i && j > i - D.okno) { s += p * im; w += im; } });
+    r7[i] = w ? Math.round(s / w * 10) / 10 : null;
+  }
+  graf('ch-slovo', { data: { labels: dnyOd(0), datasets: [
+      { type: 'line', label: 'Pozice za den', data: den, showLine: false, pointRadius: 3, pointBackgroundColor: css('--c2'), borderColor: css('--c2'), yAxisID: 'y' },
+      { type: 'line', label: 'Pozice (7 dní)', data: r7, borderColor: css('--accent'), pointRadius: 0, borderWidth: 2, spanGaps: false, yAxisID: 'y' },
+      { type: 'bar', label: 'Zobrazení', data: imp, backgroundColor: css('--c4'), yAxisID: 'y2', order: 3 }] },
+    options: { interaction: { mode: 'index', intersect: false }, plugins: { legend: { display: true, labels: { boxWidth: 12 } } },
+      scales: { x: osaX, y: { reverse: true, min: 1, suggestedMax: 20, title: { display: true, text: 'pozice' } }, y2: { position: 'right', grid: { display: false }, beginAtZero: true, ticks: tisk, title: { display: true, text: 'zobrazení' } } } } },
+    r.d.length ? `Pozice slova ${r.k} na Googlu: poslední hodnota ${fmtP(r.p)}` : `Slovo ${r.k} se za ${D.dny.length} dní v Googlu nezobrazilo`);
+  document.getElementById('s-pg').innerHTML = r.pg.map(([u, n]) => `<tr><td class="url">${odkaz(u)}</td><td class="n">${fmt(n)}</td></tr>`).join('') || '<tr><td colspan="2" class="empty">Za 28 dní žádné zobrazení.</td></tr>';
+}
+
+/* ---------- štítky ---------- */
+const TS = [['t', 'Štítek'], ['n', 'Slov', 1], ['np', 'S pozicí', 1], ['ap', 'Prům. pozice', 1], ['t3', 'TOP 3', 1], ['t10', 'TOP 10', 1], ['g', 'Google / měs.', 1], ['s', 'Seznam / měs.', 1], ['nv', 'Teor. návštěvnost', 1], ['cl', 'Kliky 28 d', 1]];
+const ctr = p => { if (p == null) return 0; const q = Math.max(1, Math.round(p)); return D.ctr[q] ?? (q <= 20 ? .01 : 0); };
+function stitkyData() {
+  const m = {};
+  filtrovanaBezStitku().forEach(r => {
+    const t = r.t || '(bez štítku)', a = m[t] ||= { t, n: 0, np: 0, sp: 0, t3: 0, t10: 0, g: 0, s: 0, nv: 0, cl: 0 };
+    a.n++; a.g += r.g || 0; a.s += r.s || 0; a.cl += r.cl || 0; a.nv += (r.g || 0) * ctr(r.p);
+    if (r.p != null) { a.np++; a.sp += r.p; if (r.p <= 3.5) a.t3++; if (r.p <= 10.5) a.t10++; }
+  });
+  return Object.values(m).map(a => ({ ...a, ap: a.np ? Math.round(a.sp / a.np * 10) / 10 : null, nv: Math.round(a.nv) }));
+}
+function filtrovanaBezStitku() { const t = st.tag; st.tag = ''; const r = filtrovana(); st.tag = t; return r; }
+const sts = { sort: 'n', dir: -1 };
+function stitky() {
+  const tab = document.getElementById('t-stitky');
+  hlavicka(tab, TS, sts, stitky);
+  const rows = stitkyData().sort((a, b) => { const x = a[sts.sort], y = b[sts.sort]; if (x == null) return 1; if (y == null) return -1; return (typeof x === 'string' ? x.localeCompare(y, 'cs') : x - y) * sts.dir; });
+  tab.querySelector('tbody').innerHTML = rows.map(a => `<tr><td><a href="#slova?stitek=${encodeURIComponent(a.t === '(bez štítku)' ? '' : a.t)}">${esc(a.t)}</a></td>
+    <td class="n">${fmt(a.n)}</td><td class="n">${fmt(a.np)}</td><td class="n">${fmtP(a.ap)}</td><td class="n">${fmt(a.t3)}</td><td class="n">${fmt(a.t10)}</td>
+    <td class="n">${fmt(a.g)}</td><td class="n">${fmt(a.s)}</td><td class="n">${fmt(a.nv)}</td><td class="n">${fmt(a.cl)}</td></tr>`).join('');
+}
+
+/* ---------- konkurence ---------- */
+const gs = { q: '', n: 100 };
+function mezery() {
+  const hl = r => (r.g || 0) + (r.s || 0);
+  return D.kw.filter(r => hl(r) >= D.min_hledanost && !r.im && r.ko.length).sort((a, b) => hl(b) - hl(a));
+}
+function konkurence() {
+  const m = mezery();
+  document.getElementById('konk-kpis').innerHTML = D.konkurenti.map(d => {
+    const n = D.konk_url[d];
+    return `<div class="kpi"><div class="v">${n ? fmt(n) : '–'}</div><div class="l">${esc(d.replace(/^www\./, ''))}: ${n ? 'URL v sitemapě' : 'sitemapu nepovoluje'}${n ? ` · mezer ${fmt(m.filter(r => r.ko.includes(d)).length)}` : ''}</div></div>`;
+  }).join('');
+  const q = gs.q.trim().toLowerCase();
+  const rows = m.filter(r => !q || r.k.toLowerCase().includes(q));
+  document.getElementById('g-count').textContent = `${fmt(rows.length)} mezer (fráze s hledaností aspoň ${D.min_hledanost} měsíčně).`;
+  document.querySelector('#t-gap tbody').innerHTML = rows.slice(0, gs.n).map(r => `<tr><td><a href="${slovoUrl(r.k)}">${esc(r.k)}</a></td><td>${r.t ? `<span class="tag">${esc(r.t)}</span>` : ''}</td>
+    <td class="n">${fmt(r.g)}</td><td class="n">${fmt(r.s)}</td><td>${r.ko.map(d => esc(d.replace(/^www\./, ''))).join(', ')}</td></tr>`).join('') || '<tr><td colspan="5" class="empty">Žádné mezery.</td></tr>';
+  document.getElementById('g-dalsi').hidden = rows.length <= gs.n;
+}
+
+/* ---------- export ---------- */
+const EXP = ['Klíčové slovo', 'URL cílové stránky', 'Štítky', 'Poznámka ke klíčovému slovu', 'Hledanost Google', 'Konkurence Google', 'Hledanost Seznam', 'CPC Kč', 'Pozice Google', 'Změna pozice 7 d', 'URL Google', 'Kliky 28 d', 'Zobrazení 28 d', 'Konkurence'];
+const radkyKw = () => filtrovana().map(r => [r.k, r.u, r.t, '', r.g ?? '', r.kg, r.s ?? '', r.cpc ?? '', r.p ?? '', r.zm ?? '', r.url, r.cl, r.im, r.ko.join(' ')]);
+const EXPT = ['Štítek', 'Počet slov', 'S pozicí Google', 'Průměrná pozice', 'TOP 3', 'TOP 10', 'Hledanost Google', 'Hledanost Seznam', 'Teoretická návštěvnost', 'Kliky 28 d'];
+const radkyTag = () => stitkyData().sort((a, b) => b.n - a.n).map(a => [a.t, a.n, a.np, a.ap ?? '', a.t3, a.t10, a.g, a.s, a.nv, a.cl]);
+const souborDen = () => D.dny[L];
+function stahni(nazev, blob) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nazev;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+function csv(nazev, hlav, rows) {
+  const q = v => { const s = String(v ?? ''); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  stahni(nazev, new Blob(['﻿' + [hlav, ...rows].map(r => r.map(q).join(',')).join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' }));
+}
+let xlsxSlib = null;
+function xlsx() {
+  const btn = document.getElementById('exp-xlsx');
+  const go = () => {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([EXP, ...radkyKw()]), 'Klíčová slova');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([EXPT, ...radkyTag()]), 'Štítky');
+    XLSX.writeFile(wb, `klicova-slova-${souborDen()}.xlsx`);
+  };
+  if (window.XLSX) return go();
+  btn.disabled = true; btn.textContent = 'Načítám…';
+  xlsxSlib ||= new Promise((ok, ko) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.crossOrigin = 'anonymous'; s.onload = ok; s.onerror = ko; document.head.appendChild(s); });
+  xlsxSlib.then(go, () => alert('Knihovnu pro Excel se nepodařilo načíst – použijte CSV.')).finally(() => { btn.disabled = false; btn.textContent = 'Excel (XLSX)'; });
+}
+function exportPopisky(n) {
+  const f = st.q || st.tag || st.pos || st.navrh;
+  document.getElementById('exp-kw').textContent = f ? `Export klíčových slov (${fmt(n)})` : 'Export klíčových slov';
+}
+document.getElementById('exp-kw').onclick = () => csv(`klicova-slova-${souborDen()}.csv`, EXP, radkyKw());
+document.getElementById('exp-tag').onclick = () => csv(`stitky-${souborDen()}.csv`, EXPT, radkyTag());
+document.getElementById('exp-xlsx').onclick = xlsx;
+
+/* ---------- ovládání a směrování ---------- */
+const tagy = [...new Set(D.kw.map(r => r.t).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'cs'));
+document.getElementById('f-tag').innerHTML = '<option value="">Všechny štítky</option>' + tagy.map(t => `<option>${esc(t)}</option>`).join('');
+const fq = document.getElementById('f-q'), ft = document.getElementById('f-tag'), fp = document.getElementById('f-pos'), fn = document.getElementById('f-navrh');
+let tmr;
+fq.oninput = () => { clearTimeout(tmr); tmr = setTimeout(() => { st.q = fq.value; st.n = 100; slova(); }, 150); };
+ft.onchange = () => { st.tag = ft.value; st.n = 100; slova(); };
+fp.onchange = () => { st.pos = fp.value; st.n = 100; slova(); };
+fn.onchange = () => { st.navrh = fn.checked; st.n = 100; slova(); };
+document.getElementById('dalsi').onclick = () => { st.n += 100; slova(); };
+const gq = document.getElementById('g-q');
+gq.oninput = () => { gs.q = gq.value; gs.n = 100; konkurence(); };
+document.getElementById('g-dalsi').onclick = () => { gs.n += 100; konkurence(); };
+
+function vykresli() {
+  grafy.forEach(g => g.destroy()); grafy = [];
+  if (typeof Chart !== 'undefined') zaklad();
+  const h = decodeURIComponent(location.hash.slice(1));
+  let v = h.split(/[/?]/)[0] || 'prehled';
+  if (!['prehled', 'slova', 'slovo', 'stitky', 'konkurence'].includes(v)) v = 'prehled';
+  document.querySelectorAll('main section').forEach(s => s.hidden = s.id !== 'v-' + v);
+  const tab = v === 'slovo' ? 'slova' : v;
+  document.querySelectorAll('nav.tabs a').forEach(a => a.dataset.v === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  document.title = { prehled: 'Hlavní přehled', slova: 'Klíčová slova', stitky: 'Štítky', konkurence: 'Konkurence', slovo: 'Slovo' }[v] + ' – SEO přehled';
+  if (v === 'slova') {
+    const p = new URLSearchParams(h.split('?')[1] || '');
+    if (p.has('stitek')) { st.tag = p.get('stitek'); ft.value = st.tag; st.n = 100; }
+    if (p.get('razeni') === 'zm') { st.sort = 'zm'; st.dir = -1; }
+    slova();
+  } else if (v === 'slovo') slovo(h.slice(6));
+  else if (v === 'stitky') stitky();
+  else if (v === 'konkurence') konkurence();
+  else prehled();
+}
+window.addEventListener('hashchange', () => { vykresli(); window.scrollTo(0, 0); document.getElementById('obsah').focus({ preventScroll: true }); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', vykresli);
+document.getElementById('gen').textContent = `Vygenerováno ${D.generovano.replace(/^(\d+)-(\d+)-(\d+)/, (_, y, m, d) => `${+d}. ${+m}. ${y}`)} · ${D.domena} · openbim (MIT)`;
+document.getElementById('meta').textContent = `${D.domena} · data do ${datum(D.dny[L], 1)}`;
+exportPopisky(D.kw.length);
+vykresli();
+</script>
+</body>
+</html>

@@ -13,3 +13,6 @@ min_hledanost = 5                             # Sklik/Seznam za měsíc – ní�
 
 # seznam sledovaných slov: CSV se sloupci keyword[,tag,target_url] (export z Collabimu jde rovnou)
 klicova_slova = "keywords.csv"
+
+# vzhled webu (python3 run.py web): "neutral" = neutrální téma přes CSS proměnné
+web_tema = "neutral"

@@ -7,6 +7,8 @@ create table if not exists sklik (date text, keyword text, avg_search int, cpc r
 create table if not exists gsc (date_from text, date_to text, query text, page text, clicks int, impressions int, position real);
 create table if not exists google_ads (date text, keyword text, avg_search int, competition text, cpc_low real, cpc_high real, months text, primary key (date, keyword));
 create table if not exists competitor_urls (date text, domain text, url text);
+create table if not exists gsc_daily (date text, query text, page text, clicks int, impressions int, position real, primary key (date, query, page));
+create table if not exists gsc_totals (date text primary key, clicks int, impressions int, position real);
 '''
 
 

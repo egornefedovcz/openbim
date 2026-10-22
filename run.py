@@ -5,6 +5,8 @@
   python3 run.py sber              stáhne data (Sklik, Search Console, konkurence 1× týdně)
   python3 run.py report            Markdown report do data/report-RRRR-MM-DD.md
   python3 run.py export            CSV ve formátu Collabimu do data/export.csv
+  python3 run.py denne             denní sběr Search Console (po dnech) + web
+  python3 run.py web               statický web (přehled, slova, štítky, konkurence) do data/web/
 """
 import csv, datetime as dt, json, os, sys, tomllib
 from collections import defaultdict
@@ -76,6 +78,28 @@ def sber_gsc(c):
     c.executemany('insert into gsc values (?,?,?,?,?,?,?)', [(start.isoformat(), end.isoformat(), r['query'], r['page'], r['clicks'], r['impressions'], r['position']) for r in rows])
     c.commit()
     return len(rows)
+
+
+def sber_gsc_denne(c, dni=5, backfill=90):
+    """Search Console po dnech → gsc_daily (dotaz × stránka) a gsc_totals (celý web, i anonymizované dotazy).
+    GSC má zpoždění ~2–3 dny a poslední dny se ještě dopočítávají → každý den znovu stáhneme okno posledních `dni` dní
+    a přepíšeme je. Prázdná tabulka = první běh → doplní `backfill` dní zpět."""
+    from czseo.sources import gsc
+    end = dt.date.today() - dt.timedelta(days=2)
+    prazdna = not c.execute('select 1 from gsc_daily limit 1').fetchone()
+    start = end - dt.timedelta(days=(backfill if prazdna else dni) - 1)
+    zeme = CFG.get('gsc_zeme') or None
+    n, d = 0, start
+    while d <= end:   # po týdnech – menší odpovědi, stránkování po 25 000 řádcích řeší gsc.query
+        e = min(end, d + dt.timedelta(days=6))
+        rows = gsc.query(CFG['gsc_vlastnost'], d.isoformat(), e.isoformat(), ('date', 'query', 'page'), country=zeme)
+        c.execute('delete from gsc_daily where date between ? and ?', (d.isoformat(), e.isoformat()))
+        c.executemany('insert or replace into gsc_daily values (?,?,?,?,?,?)', [(r['date'], r['query'], r['page'], r['clicks'], r['impressions'], r['position']) for r in rows])
+        tot = gsc.query(CFG['gsc_vlastnost'], d.isoformat(), e.isoformat(), ('date',), country=zeme)
+        c.executemany('insert or replace into gsc_totals values (?,?,?,?)', [(r['date'], r['clicks'], r['impressions'], r['position']) for r in tot])
+        c.commit()
+        n += len(rows); d = e + dt.timedelta(days=1)
+    return f'{n} řádků, {start} – {end}'
 
 
 def sber_konkurence(c, vynutit=False):
@@ -192,6 +216,18 @@ if __name__ == '__main__':
                 print(f'{nazev}:', fn(c))
             except Exception as e:
                 print(f'❌ {nazev}: {str(e)[:300]}')
+    elif cmd == 'denne':
+        chyba = False
+        try:
+            print('Search Console denně:', sber_gsc_denne(c))
+        except Exception as e:
+            chyba = True; print(f'❌ Search Console denně: {str(e)[:300]}')
+        from czseo.web import generuj
+        print(generuj(c, CFG, tabulka))
+        sys.exit(1 if chyba else 0)
+    elif cmd == 'web':
+        from czseo.web import generuj
+        print(generuj(c, CFG, tabulka))
     elif cmd == 'report':
         print(report(c))
     elif cmd == 'export':
