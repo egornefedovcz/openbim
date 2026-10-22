@@ -5,6 +5,7 @@ SCHEMA = '''
 create table if not exists keywords (keyword text primary key, tag text, target_url text, source text);
 create table if not exists sklik (date text, keyword text, avg_search int, cpc real, months text, primary key (date, keyword));
 create table if not exists gsc (date_from text, date_to text, query text, page text, clicks int, impressions int, position real);
+create table if not exists google_ads (date text, keyword text, avg_search int, competition text, cpc_low real, cpc_high real, months text, primary key (date, keyword));
 create table if not exists competitor_urls (date text, domain text, url text);
 '''
 

@@ -3,7 +3,7 @@
 ## Fáze 1 – pilot ArtMoment (od 21. 10. 2026)
 - [x] Search Console, Sklik, sitemapy konkurence, report, export ve formátu Collabimu
 - [x] týdenní běh na vlastním serveru
-- [ ] Google Ads API (hledanost Google)
+- [x] Google Ads API (hledanost Google)
 - [ ] filtr návrhů podle oboru (vyřadit nesouvisející fráze)
 - [ ] export do Google Sheets
 - [ ] další konkurenti (ověřit robots.txt)

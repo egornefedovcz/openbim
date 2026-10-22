@@ -10,7 +10,7 @@ Cíl: funkce placených SEO nástrojů (sledování klíčových slov, hledanost
 | Naše pozice, zobrazení a kliky na Googlu | Google Search Console API | ✅ ověřeno |
 | Hledanost a sezónnost na Seznamu, CPC, návrhy slov | Sklik API | ✅ ověřeno |
 | Obsah konkurence (témata z URL) | sitemapy podle robots.txt | ✅ ověřeno (jen weby, které to povolují) |
-| Hledanost na Googlu | Google Ads API (Keyword Planner) | ⏳ čeká na vývojářský přístup |
+| Hledanost na Googlu | Google Ads API (Keyword Planner) | ✅ ověřeno (Basic access) |
 | Report: mezery v obsahu, kousek od 1. stránky, špatná stránka | z dat výše | ✅ |
 | Export ve formátu Collabimu | CSV | ✅ |
 

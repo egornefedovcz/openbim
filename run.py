@@ -58,6 +58,15 @@ def sber_sklik(c):
     return len(slova)
 
 
+def sber_google_ads(c):
+    from czseo.sources import google_ads
+    slova = [k for (k,) in c.execute("select keyword from keywords")]
+    r = google_ads.historie(slova)
+    c.executemany('insert or replace into google_ads values (?,?,?,?,?,?,?)', [(DNES, k, v['hledanost'], v['konkurence'], v['cpc_od'], v['cpc_do'], json.dumps(v['mesice'])) for k, v in r.items()])
+    c.commit()
+    return len(r)
+
+
 def sber_gsc(c):
     from czseo.sources import gsc
     end = dt.date.today() - dt.timedelta(days=3)          # GSC má zpoždění ~2–3 dny
@@ -95,6 +104,8 @@ def tabulka(c):
         g[norm(q)].append((page, cl, im, pos))
     sk_date = c.execute('select max(date) from sklik').fetchone()[0]
     sk = {norm(k): (a, cpc, m) for k, a, cpc, m in c.execute('select keyword, avg_search, cpc, months from sklik where date=?', (sk_date,))}
+    ga_date = c.execute('select max(date) from google_ads').fetchone()[0]
+    ga = {norm(k): (a, comp) for k, a, comp in c.execute('select keyword, avg_search, competition from google_ads where date=?', (ga_date,))}
     from czseo.sources.sitemaps import slova
     konk = defaultdict(set)
     for d, u in c.execute('select domain, url from competitor_urls'):
@@ -115,7 +126,7 @@ def tabulka(c):
         a, cpc, months = sk.get(n, (None, None, '[]'))
         tok = [w for w in n.split() if len(w) > 2]
         kryje = set.intersection(*[{d for d, _ in konk.get(w, set())} for w in tok]) if tok else set()
-        out.append(dict(keyword=kw, tag=tag, source=src, target_url=target, seznam_hledanost=a, cpc=cpc, sezonnost=json.loads(months or '[]'),
+        out.append(dict(keyword=kw, tag=tag, source=src, target_url=target, google_hledanost=ga.get(n, (None, None))[0], konkurence_google=ga.get(n, (None, None))[1], seznam_hledanost=a, cpc=cpc, sezonnost=json.loads(months or '[]'),
                         google_pozice=round(pos, 1) if pos else None, google_url=top[0] if top else '', zobrazeni=im, kliky=sum(r[1] for r in rows),
                         konkurence=sorted(kryje)))
     return out, gsc_from, sk_date
@@ -125,10 +136,10 @@ def report(c):
     t, gsc_from, sk_date = tabulka(c)
     L = [f'# SEO report {DNES} – {CFG["domena"]}', '', f'Zdroje: Search Console 28 dní od {gsc_from}, Sklik (Seznam) {sk_date}, sitemapy konkurence.', '']
     # 1) mezery: hledané na Seznamu, konkurence má stránku, my se v Google nezobrazujeme
-    gap = sorted([r for r in t if (r['seznam_hledanost'] or 0) >= CFG.get('min_hledanost', 5) and not r['zobrazeni'] and r['konkurence']],
-                 key=lambda r: -(r['seznam_hledanost'] or 0))[:40]
+    hl = lambda r: (r['google_hledanost'] or 0) + (r['seznam_hledanost'] or 0)
+    gap = sorted([r for r in t if hl(r) >= CFG.get('min_hledanost', 5) and not r['zobrazeni'] and r['konkurence']], key=lambda r: -hl(r))[:40]
     L += ['## Mezery v obsahu', 'Fráze, které lidé hledají, konkurence na ně má stránku a my se v Googlu nezobrazujeme.', '',
-          '| Fráze | Seznam/měs. | Konkurence |', '|---|---:|---|'] + [f"| {r['keyword']} | {r['seznam_hledanost']} | {', '.join(d.replace('www.', '') for d in r['konkurence'])} |" for r in gap]
+          '| Fráze | Google/měs. | Seznam/měs. | Konkurence |', '|---|---:|---:|---|'] + [f"| {r['keyword']} | {r['google_hledanost'] or '–'} | {r['seznam_hledanost'] or '–'} | {', '.join(d.replace('www.', '') for d in r['konkurence'])} |" for r in gap]
     # 2) blízko první stránky: pozice 8–20 s nejvíc zobrazeními
     near = sorted([r for r in t if r['google_pozice'] and 8 <= r['google_pozice'] <= 20], key=lambda r: -r['zobrazeni'])[:25]
     L += ['', '## Kousek od první stránky (Google pozice 8–20)', '', '| Fráze | Pozice | Zobrazení | Stránka |', '|---|---:|---:|---|'] + \
@@ -150,9 +161,9 @@ def export(c):
     f = 'data/export.csv'
     with open(f, 'w', newline='', encoding='utf-8') as o:
         w = csv.writer(o)
-        w.writerow(['Klíčové slovo', 'Štítky', 'Hledanost Seznam', 'CPC Kč', 'Pozice Google', 'URL Google', 'Zobrazení 28 d', 'Kliky 28 d', 'URL cílové stránky', 'Konkurence'])
-        for r in sorted(t, key=lambda r: -(r['seznam_hledanost'] or 0)):
-            w.writerow([r['keyword'], r['tag'], r['seznam_hledanost'] or '', r['cpc'] or '', r['google_pozice'] or '', r['google_url'], r['zobrazeni'], r['kliky'], r['target_url'], ' '.join(r['konkurence'])])
+        w.writerow(['Klíčové slovo', 'Štítky', 'Hledanost Google', 'Konkurence Google', 'Hledanost Seznam', 'CPC Kč', 'Pozice Google', 'URL Google', 'Zobrazení 28 d', 'Kliky 28 d', 'URL cílové stránky', 'Konkurence'])
+        for r in sorted(t, key=lambda r: -((r['google_hledanost'] or 0) + (r['seznam_hledanost'] or 0))):
+            w.writerow([r['keyword'], r['tag'], r['google_hledanost'] or '', r['konkurence_google'] or '', r['seznam_hledanost'] or '', r['cpc'] or '', r['google_pozice'] or '', r['google_url'], r['zobrazeni'], r['kliky'], r['target_url'], ' '.join(r['konkurence'])])
     return f
 
 
@@ -176,7 +187,7 @@ if __name__ == '__main__':
         sys.exit(0 if doctor() else 1)
     elif cmd == 'sber':
         print('slova z CSV:', nacti_slova(c))
-        for nazev, fn in [('Sklik', sber_sklik), ('Search Console', sber_gsc), ('Konkurence', lambda c: sber_konkurence(c, '--konkurence' in sys.argv))]:
+        for nazev, fn in [('Sklik', sber_sklik), ('Google Ads', sber_google_ads), ('Search Console', sber_gsc), ('Konkurence', lambda c: sber_konkurence(c, '--konkurence' in sys.argv))]:
             try:
                 print(f'{nazev}:', fn(c))
             except Exception as e:
