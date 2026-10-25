@@ -31,6 +31,8 @@ python3 run.py denne                   # denně: Search Console po dnech + web
 python3 run.py web                     # jen web: data/web/index.html
 ```
 
+**Další web:** `python3 run.py <příkaz> --config seo.jiny.toml`. V TOML lze nastavit `data_dir` (výchozí `data`) a `env_file` (výchozí `.env`; jeho klíče mají přednost, chybějící se doplní z `.env`). Příklad: `seo.objevcesko.toml` → `data/objevcesko/`, `GSC_SA_JSON` v `.env.objevcesko`.
+
 ## Denní měření
 `run.py denne` stahuje Search Console po dnech (`date × query × page`) do tabulky `gsc_daily` a součty webu do `gsc_totals`. GSC má zpoždění ~2–3 dny a poslední dny dopočítává, proto se každý den znovu stáhne okno posledních 5 dní a přepíše; první běh doplní 90 dní zpět. Hledanost (Google Ads, Sklik) a konkurence se dál sbírají týdně (`run.py sber`).
 
