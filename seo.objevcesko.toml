@@ -1,0 +1,21 @@
+# Objev Česko – python3 run.py <příkaz> --config seo.objevcesko.toml
+# Klíče NEPATŘÍ sem – GSC_SA_JSON je v .env.objevcesko (lokálně), Sklik a Google Ads se berou ze sdíleného .env.
+domena = "objevcesko.cz"
+gsc_vlastnost = "sc-domain:objevcesko.cz"
+gsc_zeme = "cze"
+
+data_dir = "data/objevcesko"                  # vlastní databáze, reporty a web (nemíchá se s seo.toml)
+env_file = ".env.objevcesko"                  # má přednost před .env
+
+konkurenti = ["www.kudyznudy.cz", "www.vyletnik.cz", "www.turistika.cz", "travelking.cz"]
+max_url_konkurenta = 20000
+
+# top fráze z výzkumu (cesko-plan-a/data/research/kw)
+semena = ["kam na výlet", "tipy na výlet", "výlet s dětmi", "co navštívit", "hrady a zámky", "hrad", "zámek",
+          "rozhledna", "muzeum", "galerie", "kavárna", "zoo", "jeskyně", "lázně", "zážitek"]
+min_hledanost = 20
+
+# fráze s hledaností ≥ 50 (Google Ads nebo Sklik) z výzkumu
+klicova_slova = "keywords.objevcesko.csv"
+
+web_tema = "neutral"

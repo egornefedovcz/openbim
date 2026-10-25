@@ -5,3 +5,4 @@ __pycache__/
 keywords.csv
 .DS_Store
 seo.toml
+.env.*

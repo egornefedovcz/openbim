@@ -7,6 +7,8 @@
   python3 run.py export            CSV ve formátu Collabimu do data/export.csv
   python3 run.py denne             denní sběr Search Console (po dnech) + web
   python3 run.py web               statický web (přehled, slova, štítky, konkurence) do data/web/
+
+  --config soubor.toml             jiná konfigurace než seo.toml (další web: vlastní data_dir a env_file)
 """
 import csv, datetime as dt, json, os, sys, tomllib
 from collections import defaultdict
@@ -15,16 +17,19 @@ from czseo.store import db, norm
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 os.chdir(ROOT)
-CFG = tomllib.load(open('seo.toml', 'rb'))
+CFG_SOUBOR = sys.argv[sys.argv.index('--config') + 1] if '--config' in sys.argv else 'seo.toml'
+CFG = tomllib.load(open(CFG_SOUBOR, 'rb'))
+DATA = CFG.get('data_dir', 'data')
 DNES = dt.date.today().isoformat()
 
 
 def env():
-    if os.path.exists('.env'):
-        for l in open('.env'):
-            if '=' in l and not l.startswith('#'):
-                k, v = l.strip().split('=', 1)
-                os.environ.setdefault(k, v)
+    for f in dict.fromkeys([CFG.get('env_file', '.env'), '.env']):   # klíče konfigurace mají přednost před .env
+        if os.path.exists(f):
+            for l in open(f):
+                if '=' in l and not l.startswith('#'):
+                    k, v = l.strip().split('=', 1)
+                    os.environ.setdefault(k, v)
 
 
 def nacti_slova(c):
@@ -175,14 +180,14 @@ def report(c):
          [f"| {r['keyword']} | {r['target_url'].split('.cz', 1)[-1]} | {r['google_url'].split('.cz', 1)[-1]} |" for r in bad]
     # 4) sezónnost: slova, kterým za 1–2 měsíce roste hledanost
     L += ['', f'Sledovaných slov {len(t)}, se zobrazením v Googlu {sum(1 for r in t if r["zobrazeni"])}, s hledaností na Seznamu {sum(1 for r in t if r["seznam_hledanost"])}.']
-    f = f'data/report-{DNES}.md'
+    f = f'{DATA}/report-{DNES}.md'
     open(f, 'w').write('\n'.join(L) + '\n')
     return f
 
 
 def export(c):
     t, _, _ = tabulka(c)
-    f = 'data/export.csv'
+    f = f'{DATA}/export.csv'
     with open(f, 'w', newline='', encoding='utf-8') as o:
         w = csv.writer(o)
         w.writerow(['Klíčové slovo', 'Štítky', 'Hledanost Google', 'Konkurence Google', 'Hledanost Seznam', 'CPC Kč', 'Pozice Google', 'URL Google', 'Zobrazení 28 d', 'Kliky 28 d', 'URL cílové stránky', 'Konkurence'])
@@ -206,7 +211,7 @@ def doctor():
 if __name__ == '__main__':
     env()
     cmd = (sys.argv[1:] or ['help'])[0]
-    c = db()
+    c = db(f'{DATA}/seo.db')
     if cmd == 'doctor':
         sys.exit(0 if doctor() else 1)
     elif cmd == 'sber':
@@ -223,11 +228,11 @@ if __name__ == '__main__':
         except Exception as e:
             chyba = True; print(f'❌ Search Console denně: {str(e)[:300]}')
         from czseo.web import generuj
-        print(generuj(c, CFG, tabulka))
+        print(generuj(c, CFG, tabulka, f'{DATA}/web'))
         sys.exit(1 if chyba else 0)
     elif cmd == 'web':
         from czseo.web import generuj
-        print(generuj(c, CFG, tabulka))
+        print(generuj(c, CFG, tabulka, f'{DATA}/web'))
     elif cmd == 'report':
         print(report(c))
     elif cmd == 'export':
